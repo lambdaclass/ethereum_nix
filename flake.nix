@@ -7,17 +7,17 @@
 
   outputs = inputs@{ self, nixpkgs, geth, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-        geth = {
-          inherit nixpkgs;
-          inherit flake-utils;
-        };
+      let pkgs = nixpkgs.legacyPackages.${system};
       in {
-        packages.${system} = [ geth ];
+        packages.default = geth.packages.${system}.default;
+        defaultPackage.${system} = geth.packages.${system}.default;
+
+        apps.geth = geth.apps.${system}.default;
+
+        # Optionally, create a devShell that includes geth
         devShell = pkgs.mkShell {
-          name = "geth-shell";
-          packages = [ geth ];
+          name = "Eth dev-shell";
+          packages = [ geth.packages.${system}.default ];
         };
       });
 }

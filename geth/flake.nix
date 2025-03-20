@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "A flake for building Geth (Go Ethereum)";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
@@ -12,7 +12,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
         geth = pkgs.stdenv.mkDerivation {
           pname = "geth";
-          name = "geth";
+          version = "1.15.5";
           buildInputs = [ pkgs.go ];
           buildPhase = ''
             export HOME=$(pwd)
@@ -23,16 +23,13 @@
             cp build/bin/geth $out/bin/
           '';
           src = pkgs.fetchzip {
-            name = "geth";
             url =
               "https://github.com/ethereum/go-ethereum/archive/refs/tags/v1.15.5.zip";
             sha256 = "sha256-kOgsjvkEi5acv53qnbyxMrPIXkz08SqjIO0A/mj/y90=";
           };
         };
       in {
-        # Use with nix run
-        packages = { default = geth; };
-        # Use with nix develop
+        packages.default = geth;
         devShell = pkgs.mkShell {
           name = "geth-shell";
           packages = [ geth ];
