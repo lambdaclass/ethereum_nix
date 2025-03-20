@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-24.11";
-    geth.url = ./geth;
+    geth.url = "path:./geth";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
