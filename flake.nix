@@ -2,27 +2,33 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-24.11";
     geth.url = ./geth;
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = inputs@{ self, nixpkgs, geth }:
-    let
-      # System types to support.
-      supportedSystems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
-
-      # Helper function to generate an attrset '{ x86_64-linux = f "x86_64-linux"; ... }'.
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-
-      # Nixpkgs instantiated for supported system types.
-      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; overlays = [ self.overlay ]; });
-    in {      # A Nixpkgs overlay.
-      
-      # Provide some binary packages for selected system types.
-      #packages = forAllSystems (system:
-      #  {
-      #    inherit (nixpkgsFor.${system}) hello;
-      #  });
-
-      #defaultPackage = forAllSystems (system: self.packages.${system}.hello);
-      defaultPackage.aarch64-darwin = inputs.geth.packages.aarch64-darwin.default;
-    };
+  outputs = inputs@{ self, nixpkgs, geth, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let pkgs = nixpkgs.legacyPackages.${system};
+      in {
+        packages = rec {
+          default = pkgs.stdenv.mkDerivation {
+            pname = "geth";
+            name = "geth";
+            buildInputs = [ pkgs.go ];
+            buildPhase = ''
+              export HOME=$(pwd)
+              make geth
+            '';
+            installPhase = ''
+              mkdir -p $out/bin
+              cp build/bin/geth $out/bin/
+            '';
+            src = pkgs.fetchzip {
+              name = "geth";
+              url =
+                "https://github.com/ethereum/go-ethereum/archive/refs/tags/v1.15.5.zip";
+              sha256 = "sha256-kOgsjvkEi5acv53qnbyxMrPIXkz08SqjIO0A/mj/y90=";
+            };
+          };
+        };
+      });
 }
