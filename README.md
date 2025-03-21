@@ -15,7 +15,7 @@ We are working hard to support consensus clients.
 Our NixOS configuration files simplify setting up an Ethereum validator and RPC on NixOS, currently supporting **Geth + Lighthouse** on any network. Additionally, we offer built-in **monitoring** with Grafana and Loki.
 
 ### Installation
-We encourage installing `nix` using the installation method provided by [determinate.systems](https://determinate.systems/posts/determinate-nix-installer).
+We encourage installing `nix` using the installation method provided by [determinate.systems](https://determinate.systems/posts/determinate-nix-installer)
 
 ### Usage
 To spin up a terminal with **geth**, run the following command:
