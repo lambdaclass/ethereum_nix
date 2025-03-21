@@ -10,19 +10,14 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        geth = pkgs.stdenv.mkDerivation {
+        geth = pkgs.buildGoModule {
           pname = "geth";
           version = "1.15.5";
-          buildInputs = [ pkgs.go ];
-          buildPhase = ''
-            export GOPROXY=https://proxy.golang.org
-            export HOME=$(pwd)
-            make geth
-          '';
-          installPhase = ''
-            mkdir -p $out/bin
-            cp build/bin/geth $out/bin/
-          '';
+          vendorHash = "sha256-IZeILjsvVr8xQlsczGXT70ioE9/8isQ1KG1NKAgsqY8";
+          proxyVendor = false;
+          packages = [ pkgs.stdenv pkgs.hidapi pkgs.pkg-config ];
+          CGO_ENABLED = 0;
+          doCheck = false;
           src = pkgs.fetchzip {
             url =
               "https://github.com/ethereum/go-ethereum/archive/refs/tags/v1.15.5.zip";
