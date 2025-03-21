@@ -1,11 +1,36 @@
-# Nix and Ethereum
+# Nix Ethereum
 
-This repo provides scripts for deploying Ethereum execution and consensus clients on NixOS.
+Nix packages and NixOS modules for the Ethereum ecosystem.
 
-Currently supported:  
-- **Geth + Lighthouse**  
-- **Erigon with its internal consensus client**
+## Nix:
+As a package manage# Nix Ethereum
+Nix flakes and NixOS modules for the Ethereum ecosystem.
 
-We also provide scripts for setting up **Geth + Lighthouse** as a validator on the **Holesky** testnet (and soon on **Hoodi** and **Mainnet**).  
+### Nix
+We provide Nix flakes for quickly deploy the following:
 
-This project is still a work in progress, and some values are currently hardcoded. We are actively improving flexibility and expanding support for additional execution and consensus client combinations, including Nethermind and Prysm.
+#### Execution clients:
+- Geth
+
+### NixOS
+Our NixOS configuration files simplify setting up an Ethereum validator node on NixOS, currently supporting Geth + Lighthouse on any network. 
+
+Additionally, we offer built-in monitoring with Grafana and Loki.
+
+### Usage
+To spin up a terminal with **geth**, run the following command:
+```
+nix run github:lambdaclass/ethereum_nix
+```
+
+### Project Status 🚧
+This project is a work in progress. Some configurations are currently hardcoded or untidy, but we are actively improving flexibility. 
+Future updates will expand support to additional execution and consensus client combinations, including Nethermind, Prysm, and Ethrex.
+
+- [x] Test on MacOS
+- [ ] Test on Linux
+- [ ] Add more exection clients
+- [ ] Add more consensus clients
+
+### License
+This repo is under the MIT license
