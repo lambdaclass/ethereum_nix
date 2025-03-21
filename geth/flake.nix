@@ -15,6 +15,7 @@
           version = "1.15.5";
           buildInputs = [ pkgs.go ];
           buildPhase = ''
+            export GOPROXY=https://proxy.golang.org
             export HOME=$(pwd)
             make geth
           '';
