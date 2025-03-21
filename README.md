@@ -23,10 +23,8 @@ To spin up a terminal with **geth**, run the following command:
 nix run github:lambdaclass/ethereum_nix
 ```
 > Ensure that Nix flakes are enabled before running this command. 
-> 
+>
 > You can enable flakes by adding `experimental-features = nix-command flakes` in your `/etc/nix/nix.conf` configuration file.
-
-experimental-features = nix-command flakes
 
 ### Project Status 🚧
 This project is a work in progress. Some configurations are currently hardcoded or untidy, but we are actively improving flexibility. 
