@@ -12,7 +12,7 @@ Currently supported execution clients.
 We are working hard to support consensus clients.
 
 ### NixOS
-Our NixOS configuration files simplify setting up an Ethereum validator node on NixOS, currently supporting **Geth + Lighthouse** on any network. Additionally, we offer built-in **monitoring** with Grafana and Loki.
+Our NixOS configuration files simplify setting up an Ethereum validator and RPC on NixOS, currently supporting **Geth + Lighthouse** on any network. Additionally, we offer built-in **monitoring** with Grafana and Loki.
 
 ### Usage
 To spin up a terminal with **geth**, run the following command:
