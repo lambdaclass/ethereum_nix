@@ -19,12 +19,10 @@ This repository provides scripts for deploying Ethereum execution and consensus 
   - **Lighthouse** support is in progress
   - Future plans to support additional clients
 
-## Why Not Use [ethereum.nix](https://github.com/nix-community/ethereum.nix/)?
+## Why Not [ethereum.nix](https://github.com/nix-community/ethereum.nix/)?
 
-We are aware of this existing repository, but we encountered the following issues:
-
-- It fails to run on **NixOS** due to errors.
-- Its **Nix Flakes** provide outdated versions of execution and consensus clients.
+We are aware of this existing repository, but we found it not appropiate for our needs, we at lambda
+are used to build our own opinionated tools.
 
 We appreciate the Nix community for their work on ethereum.nix, which helped pave the way for this project and the broader Ethereum Nix ecosystem.
 
