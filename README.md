@@ -1,35 +1,61 @@
+<img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/33856d7837cb8ba76c4fc9e26f91a659066ee31f/logo/nix-snowflake-colours.svg" height="100">
+
 # Nix and Ethereum
+This repository provides code for deploying Ethereum nodes using [ethereum.nix](https://github.com/nix-community/ethereum.nix/)
 
-This repository provides scripts for deploying Ethereum execution and consensus clients on **NixOS** and, soon, as **Nix Flakes**.
+### Quickstart
+To quickly deploy an execution client like `go-ethereum`, simply run the following command.
 
-## Supported Configurations
+```nix
+nix run github:nix-community/ethereum.nix#geth
+```
 
-### NixOS
+And a consensus client like `lighthouse`
 
-- **Geth + Lighthouse**
-- **Erigon** (with its internal consensus client)
-- **Geth + Lighthouse as a validator**
-  - Supported on **Holesky** testnet
-  - Coming soon to **Hoodi** and **Mainnet**
+```nix
+nix run github:nix-community/ethereum.nix#lighthouse
+```
 
-### Nix (Flakes)
+The [official documentation](https://nix-community.github.io/ethereum.nix/nixos/installation) describes all possible client combinations.
 
-- Flake under development: [PR #3](https://github.com/lambdaclass/ethereum_nix/pull/3)
-  - Currently supports **Geth**
-  - **Lighthouse** support is in progress
-  - Future plans to support additional clients
+### Running on NixOS
+When running this on a NixOS server, these applications should run as a system service.
 
-## Why Not [ethereum.nix](https://github.com/nix-community/ethereum.nix/)?
+1. Add the **ethereum-nix** derivation into your **configuration.nix**
+   ```nix
+   let
+     ethereum-nix = import (fetchTarball "https://github.com/nix-community/ethereum.nix/archive/main.tar.gz");
+     ...
+   ```
+2. Import the **ethereum-nix** module into your **confiduration.nix**
+   ```nix
+   imports = [
+     ethereum-nix.nixosModules.default
+     ...
+   ]
+   ```
+3. Create a **jwt.hex** file.
+   ```bash
+   openssl rand -hex 32 | tr -d "\n" | tee /secrets/jwt.hex
+   ```
+5. Declare your system service, modify as your liking. 
 
-We are aware of this existing repository, but we found it not appropiate for our needs, we at lambda
-are used to build our own opinionated tools.
-
-We appreciate the Nix community for their work on ethereum.nix, which helped pave the way for this project and the broader Ethereum Nix ecosystem.
-
-## Project Status
-
-This project is still a **work in progress**, and some values are currently hardcoded. We are actively improving flexibility and expanding support for additional execution and consensus client combinations, including **Nethermind**, **Prysm**, and **Ethrex**.
-
-## License
-
-This repository is licensed under the **MIT License**.
+    All possible options are listed [here](https://nix-community.github.io/ethereum.nix/nixos/modules/geth/).
+    ```nix
+    services.ethereum.geth.<network-name> = {
+      enable = true;
+      package = pkgs.go-ethereum;
+      openFirewall = true;
+      args = {
+        syncmode = "full";
+        network = "<network-name>";
+        http = {
+          enable = true;
+          addr = "0.0.0.0";
+          vhosts = ["localhost" "phoebe"];
+          api = ["net" "web3" "eth"];
+        };
+        authrpc.jwtsecret = "/secrets/jwt.hex";
+      };
+    };
+    ```
