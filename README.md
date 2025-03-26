@@ -84,3 +84,54 @@ When running this on a **NixOS machine**, these applications should run as a sys
     ```
    > Replace `<network-name>` with your desired Ethereum network, make sure it matches the network specified in your execution client.
 
+### Tweaks
+This section explains how to tweak your configuration in order to make it just how you need it.
+
+1. Install a newer version of a client.
+   In case you need to change the version of the clients, we can do that by importing the unstable channel to our configuration file.
+   1. Add the `unstable` channel to your machine.
+      ```nix
+      nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
+      ```
+   2. Declare the `unstable` channel into your configuration file.
+      ```nix
+      let
+         unstable = import <nixos-unstable> { config = {}; overlays = []; };
+         ...
+      ```
+   3. Change the specified package to be installed when declaring the services.
+      ```nix
+      services.ethereum.geth.<network-name> = {
+         package = unstable.go-ethereum
+         ...
+      ```
+      ```nix
+      services.ethereum.lighthouse.<network-name> = {
+         package = unstable.lighthouse
+         ...
+      ```
+2. Install a custom version of a client
+   When not even the `unstable` channel can catch up with the latest version of a client, we can create a custom package.
+   1. Generate the SRI hash for the package
+      ```nix
+      nix hash convert --hash-algo sha256 --to sri $(nix-prefetch-url <url>)
+      ```
+   2. Define your custom package. Here is an exaple for lighthouse
+      ```nix
+      let
+        ...
+        lighthouse-custom = pkgs.runCommand "lighthouse-7.0.0-beta.3" {} ''
+          mkdir -p $out/bin
+          ${pkgs.gnutar}/bin/tar -xzf ${pkgs.fetchurl {
+            url = "https://github.com/sigp/lighthouse/releases/download/v7.0.0-beta.3/lighthouse-v7.0.0-beta.3-x86_64-unknown-linux-gnu.tar.gz";
+            sha256 = "sha256-CMc9sBNPEwxHEPH5ZmXHeZQfIH72+a6rSS9re28pPEo="; # Output from step 1
+          }} -C $out/bin
+          chmod +x $out/bin/<package>
+        '';
+      ```
+   3. Change the `package` value inside your service definition.
+      ```nix
+      services.ethereum.lighthouse.<network-name> = {
+         package = lighthouse-custom
+         ...
+      ```
