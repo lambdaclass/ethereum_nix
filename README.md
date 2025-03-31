@@ -24,9 +24,9 @@ And a consensus client like `lighthouse`
 nix run github:nix-community/ethereum.nix#lighthouse
 ```
 
-The [official documentation](https://nix-community.github.io/ethereum.nix/nixos/installation) describes all possible client combinations. 
+The [official documentation](https://nix-community.github.io/ethereum.nix/nixos/installation) describes all possible client combinations.
 
-Beware not all clients support any Operating System and Architecture combination.
+Geth and Lighthouse are not supported on MacOS. Beware not all clients support any Operating System and Architecture combination.
 
 ### Running on NixOS
 When running this on a **NixOS machine**, these applications should run as a system service. We can again use [ethereum.nix](https://github.com/nix-community/ethereum.nix/) to quickly deploy a node.
