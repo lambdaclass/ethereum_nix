@@ -51,7 +51,7 @@ in { config, lib, pkgs, ... }: {  imports = [
 
   environment.shellAliases = {
     rebuild = "sudo nixos-rebuild switch";
-    upgrade = "sudo nixos-rebuild switch --upgrade";
+    upgrade = "sudo nix-channel --update && sudo nixos-rebuild switch --upgrade";
   };
 
   environment.systemPackages = with pkgs; [
