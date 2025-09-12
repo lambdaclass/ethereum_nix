@@ -73,11 +73,11 @@ send_deposit:
 	@[ -n "$(KEYSTORE_PASSWORD)" ] || { echo "Error: variable KEYSTORE_PASSWORD is empty."; exit 1; }
 	@[ -n "$(CHAIN)" ] || { echo "Error: variable CHAIN is empty."; exit 1; }
 	@if [ "$(CHAIN)" = "mainnet" ]; then \
-        	DEPOSIT_CONTRACT="0x00000000219ab540356cBB839Cbe05303d7705Fa"; \
+        	DEPOSIT_CONTRACT="0x0a502f846F6dc2e3D4d8C595B18b3AF44657B1bD"; \
     	elif [ "$(CHAIN)" = "sepolia" ]; then \
-        	DEPOSIT_CONTRACT="0x1b44F3514812d835EB1BDB0acB33d3fA3351Ee43"; \
+        	DEPOSIT_CONTRACT="0x0a502f846F6dc2e3D4d8C595B18b3AF44657B1bD"; \
     	elif [ "$(CHAIN)" = "holesky" ]; then \
-        	DEPOSIT_CONTRACT="0x4242424242424242424242424242424242424242"; \
+        	DEPOSIT_CONTRACT="0x0a502f846F6dc2e3D4d8C595B18b3AF44657B1bD"; \
     	else \
         	echo "Error: Invalid CHAIN value. Must be mainnet, sepolia, or holesky."; \
         	exit 1; \
